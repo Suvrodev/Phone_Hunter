@@ -41,7 +41,8 @@ const DisplayPhone=(phones,DataLimit)=>{
                     <div class="card-body">
                         <h5 class="card-title">${phone.phone_name}</h5>
                         <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                        <button onclick="LoadPhoneDetails('${phone.slug}')" href="#" class="btn btn-primary">Show Detail</button>
+                        <button onclick="LoadPhoneDetails('${phone.slug}')" href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#phoneDetailModal">Show Detail</button>
+
                     </div>
         </div>
         `
@@ -58,8 +59,21 @@ const LoadPhoneDetails= async id=>{
     const res=await fetch(url);
     const data=await res.json();
     console.log(data.data);
+    DisplayPhoneDetails(data.data)
 }
 
+const DisplayPhoneDetails=data=>{
+    console.log(data)
+    const modalTitle=document.getElementById('phoneDetailModalLabel');
+    modalTitle.innerText=data.name;
+    const Modal_Detail=document.getElementById('modal_body');
+    Modal_Detail.innerHTML=`
+     <p>Release Date: ${data.releaseDate? data.releaseDate: "Out of Market"}</p>
+     <p>ChipSet: ${data.chipSet? data.chipSet: "Not found Chipset"} </p>
+     <p>Memory: ${data.mainFeatures.memory? data.mainFeatures.memory: "No Memory Found"} </p>
+     <img src="${data.image}">
+    `
+}
 
 
 const ProcessSearch=(DataLimit)=>{
